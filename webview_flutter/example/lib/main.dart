@@ -1,5 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:webview_flutter_platform_interface/webview_flutter_platform_interface.dart';
+
+WebViewPlatform? get _platform => WebViewPlatform.instance;
+
+/// Returns the name of the current platform.
+Future<String> getPlatformName() async {
+  String platformName = "UNKNOWN";
+  PlatformWebViewControllerCreationParams c = PlatformWebViewControllerCreationParams();
+
+  if (_platform != null) {
+    final vc = _platform?.createPlatformWebViewController(c);
+    platformName = await vc.toString();
+  }
+  if (platformName == null) throw Exception('Unable to get platform name.');
+  return platformName;
+}
 
 void main() => runApp(const MyApp());
 

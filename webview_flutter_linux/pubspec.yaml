@@ -17,8 +17,8 @@ flutter:
 dependencies:
   flutter:
     sdk: flutter
-  webview_flutter_platform_interface:
-    path: ../webview_flutter_platform_interface
+
+  webview_flutter_platform_interface: ^2.0.0
 
 dev_dependencies:
   flutter_test:
