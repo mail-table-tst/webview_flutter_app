@@ -8,6 +8,7 @@
 
 const char kChannelName[] = "webview_flutter_linux";
 const char kGetPlatformName[] = "getPlatformName";
+const char kLog[] = "log";
 
 struct _FlWebviewFlutterPlugin {
   GObject parent_instance;
@@ -28,6 +29,15 @@ static void method_call_cb(FlMethodChannel* channel, FlMethodCall* method_call,
   g_autoptr(FlMethodResponse) response = nullptr;
   if (strcmp(method, kGetPlatformName) == 0)
     response = FL_METHOD_RESPONSE(fl_method_success_response_new(fl_value_new_string("Linux")));
+  if (strcmp(method, kLog) == 0) {
+    FlValue* args = fl_method_call_get_args(method_call);
+    if (fl_value_get_type(args) == FL_VALUE_TYPE_MAP) {
+      FlValue* msg = fl_value_lookup_string(args, "msg");
+      const gchar* str_value = fl_value_get_string(msg);
+      printf("LOG_FROM_PLUGIN: %s\n", str_value);
+    }
+    response = FL_METHOD_RESPONSE(fl_method_success_response_new(fl_value_new_int(0)));
+  }
   else
     response = FL_METHOD_RESPONSE(fl_method_not_implemented_response_new());
 

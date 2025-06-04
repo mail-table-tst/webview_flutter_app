@@ -8,6 +8,8 @@ import 'package:webview_flutter_platform_interface/webview_flutter_platform_inte
 const DEFAULT_W = 100.0;
 const DEFAULT_H = 100.0;
 
+final _channel = const MethodChannel('webview_flutter_linux');
+
 class Web_ViewControllerCreationParams
     extends PlatformWebViewControllerCreationParams {
   Web_ViewControllerCreationParams._(
@@ -29,10 +31,6 @@ class Web_ViewControllerCreationParams
 }
 
 class WebviewFlutterLinux extends WebViewPlatform {
-  /// The method channel used to interact with the native platform.
-  @visibleForTesting
-  final methodChannel = const MethodChannel('webview_flutter_linux');
-
   /// Registers this class as the default instance of [WebviewFlutterPlatform]
   static void registerWith() {
     WebViewPlatform.instance = WebviewFlutterLinux();
@@ -85,6 +83,10 @@ class PlatformWeb_ViewWidget extends PlatformWebViewWidget {
 
   @override
   Widget build(BuildContext context) {
+  _channel.invokeMethod<int>('log', {'msg': "TEST LOG MESSAGE"}).then((int? err) {
+      print("EXECUTED err=$err");
+    }
+  );
   return ColoredBox(
               color: Colors.red,
               child: SizedBox(
