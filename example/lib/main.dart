@@ -3,6 +3,8 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_platform_interface/webview_flutter_platform_interface.dart';
 
 WebViewPlatform? get _platform => WebViewPlatform.instance;
+final WebViewController _controller = WebViewController();
+final WebViewWidget _webViewWidget = WebViewWidget(controller: _controller);
 
 /// Returns the name of the current platform.
 Future<String> getPlatformName() async {
@@ -10,8 +12,7 @@ Future<String> getPlatformName() async {
   PlatformWebViewControllerCreationParams c = PlatformWebViewControllerCreationParams();
 
   if (_platform != null) {
-    final vc = _platform?.createPlatformWebViewController(c);
-    platformName = await vc.toString();
+    platformName = _platform.toString();
   }
   if (platformName == null) throw Exception('Unable to get platform name.');
   return platformName;
@@ -72,6 +73,7 @@ class _HomePageState extends State<HomePage> {
               },
               child: const Text('Get Platform Name'),
             ),
+            _webViewWidget,
           ],
         ),
       ),
